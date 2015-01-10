@@ -194,7 +194,7 @@ void APP_RENDER_DistortAndPresent()
 		if (EyeRotationEnd >= 0)   glUniformMatrix4fv(EyeRotationEnd, 1, 0, &timeWarpMatrices[1].M[0][0]);
 
         // Perform distortion
-        OGL.Render(useShaderfill, MeshVBs[eye], MeshIBs[eye], sizeof(ovrDistortionVertex), (int)(MeshIBs[eye]->Size/sizeof(unsigned short))/*(int)MeshVBs[eye]->Size*/);
+        OGL.Render(useShaderfill, MeshVBs[eye], MeshIBs[eye], sizeof(ovrDistortionVertex), (int)(MeshIBs[eye]->Size/sizeof(unsigned short)));
     }
 	
 	OGL.Present(true); // Vsync enabled
