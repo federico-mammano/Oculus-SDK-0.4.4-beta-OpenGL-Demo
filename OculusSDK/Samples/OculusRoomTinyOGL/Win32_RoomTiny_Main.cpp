@@ -178,6 +178,62 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE, LPSTR, int)
                 // Render the scene
                 for (int t=0; t<timesToRenderScene; t++)
                     roomScene.Render(view, proj.Transposed());
+
+                // OPENGL DIRECT MODE
+                // ==========================================================================================
+                // The following code has no correspondence with the original OculusRoomTiny DirectX Project.
+                // To have a 1:1 correspondence with the OculusRoomTiny DirectX Project you should remove it.
+                // The purpose is to provide a simple and practical example of how using OpenGL in Direct Mode.
+
+                Matrix4f quadmat = Matrix4f::Translation(2.0f,1.0f,3.0f) * Matrix4f::Scaling(2.0f, 2.0f, 1.0f);
+                Matrix4f mat	 = (view * quadmat).Transposed();
+                proj			 = proj.Transposed();
+		
+                // Direct Mode with Shader Pipeline
+                GLuint Prog = roomScene.Models[0]->Fill->Prog;											// Get a Shader (eg.: Scene Model Shader)
+                glUseProgram(Prog);
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, pEyeRenderTexture[(eye+1)%2]->TexId);						// Bind a Texture (eg.: Render Eye Texture)
+                GLint ProjLoc = glGetUniformLocation(Prog, "Proj");
+                GLint ViewLoc = glGetUniformLocation(Prog, "View");
+                GLint Texture0 = glGetUniformLocation(Prog, "Texture0");
+                if (ProjLoc >= 0) glUniformMatrix4fv(ProjLoc, 1, 0, &proj.M[0][0]);
+                if (ViewLoc >= 0) glUniformMatrix4fv(ViewLoc, 1, 0, &mat.M[0][0]);
+                if (Texture0 >= 0) glUniform1i(Texture0, 0);
+
+                glBegin(GL_QUADS);																		// Draw a quad
+                	glVertexAttrib4Nub(1, 255, 128, 128, 255);											// Display the top left vertex
+                	glVertexAttrib2f(2, 1.0f, 1.0f);
+                	glVertex3f(-1, 1, 0);
+                	glVertexAttrib4Nub(1, 128, 255, 128, 255);											// Display the bottom left vertex
+                	glVertexAttrib2f(2, 1.0f, 0.0f);
+                	glVertex3f(-1, 0, 0);
+                	glVertexAttrib4Nub(1, 255, 255, 128, 255);											// Display the bottom right vertex
+                	glVertexAttrib2f(2, 0.0f, 0.0f);
+                	glVertex3f(0, 0, 0);
+                	glVertexAttrib4Nub(1, 128, 128, 255, 255);											// Display the top right vertex
+                	glVertexAttrib2f(2, 0.0f, 1.0f);
+                	glVertex3f(0, 1, 0);
+                glEnd();
+		
+				// Direct Mode with Fixed-Function Pipeline
+                glUseProgram(0);																		// Do Not Use any Program
+
+                glLoadMatrixf(&proj.M[0][0]);
+                glMultMatrixf(&mat.M[0][0]);
+                glTranslatef(-1.25f, 0.0f, 0.0f);
+
+                glBegin(GL_QUADS);																		// Draw a quad
+                	glColor3f(1.0,0.0,0.0);																// Display the top left vertex
+                	glVertex3f(-1, 1, 0);
+                	glColor3f(0.0,1.0,0.0);																// Display the bottom left vertex
+                	glVertex3f(-1, 0, 0);
+                	glColor3f(1.0,1.0,0.0);																// Display the bottom right vertex
+                	glVertex3f(0, 0, 0);
+                	glColor3f(0.0,0.0,1.0);																// Display the top right vertex
+                	glVertex3f(0, 1, 0);
+                glEnd();
+                // ==========================================================================================
             }
         }
 
