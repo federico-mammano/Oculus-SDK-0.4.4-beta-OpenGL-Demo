@@ -1,4 +1,4 @@
-﻿/************************************************************************************
+/************************************************************************************
 Filename    :   Win32_OGLAppUtil.h
 Content     :   OGL and Application/Window setup functionality for RoomTiny
 Created     :   October 20th, 2014
@@ -497,7 +497,7 @@ struct Scene
 			"   gl_FragColor = oColor;\n"
 			"}\n";
 
-        Model* m = new Model(Vector3f(0,0,0),new ShaderFill(ModelVertexDesc,3,VertexShaderSrc,PixelShaderSrc,0));  
+        Model* m = new Model(Vector3f(0,0,0),new ShaderFill(ModelVertexDesc,1,VertexShaderSrc,PixelShaderSrc,0));  
         float scale = 0.04f;  float extra_y = ((float)OGL.WinSize.w/(float)OGL.WinSize.h);
         m->AddSolidColorBox( 1-scale,  1-(scale*extra_y), -1, 1+scale,  1+(scale*extra_y), -1,  Model::Color(0,128,0)); 
         m->AllocateBuffers(); Add(m);
