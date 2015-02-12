@@ -23,6 +23,8 @@ limitations under the License.
 #include <dwmapi.h>
 using namespace OVR;
 
+#pragma warning(disable : 4995) // The compiler encountered a function that was marked with pragma deprecated.
+
 //---------------------------------------------------------------------
 struct OpenGL
 {
